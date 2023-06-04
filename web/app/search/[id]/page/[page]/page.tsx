@@ -23,7 +23,7 @@ export default async function Page({ params }: PageProps) {
 
   return <main>
     <div className="flex justify-center pb-6 font-bold text-2xl">
-      Results for "{params.id}"
+      Results for &quot;{params.id}&quot;
     </div>
 
     <SearchTable torrents={torrents.data} />
