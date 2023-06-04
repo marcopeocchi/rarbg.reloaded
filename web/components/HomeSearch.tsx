@@ -15,7 +15,7 @@ export default function HomeSearch() {
         router.push(`/search/${search}`)
       }
     })
-  }, [inputRef.current, search])
+  }, [inputRef, search])
 
   return (
     <input
