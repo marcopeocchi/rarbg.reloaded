@@ -1,0 +1,1 @@
+export const hashToMagnet = (hash: string) => `magnet:?xt=urn:btih:${hash}`

@@ -1,0 +1,1 @@
+export const roundMiB = (bytes: number) => `${(bytes / 1_000_000).toFixed(2)} MiB`
