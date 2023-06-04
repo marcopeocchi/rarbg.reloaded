@@ -15,7 +15,10 @@ import (
 	"gorm.io/gorm"
 )
 
-const countCachingKey = "torrents-count"
+const (
+	ttl             = time.Minute * 30
+	countCachingKey = "torrents-count"
+)
 
 type Repository struct {
 	db     *gorm.DB
@@ -73,12 +76,12 @@ func (r *Repository) FindByName(ctx context.Context, name string, page int, asc 
 		r.logger.Errorw("gob encoding", "error", err)
 	}
 
-	err = r.rdb.SetNX(ctx, cachingKey, b.Bytes(), 5*time.Minute).Err()
+	err = r.rdb.SetNX(ctx, cachingKey, b.Bytes(), ttl).Err()
 	if err != nil {
 		r.logger.Errorw("redis cache error", "error", err)
 	}
 
-	err = r.rdb.SetNX(ctx, countCachingKey, count, 5*time.Minute).Err()
+	err = r.rdb.SetNX(ctx, countCachingKey, count, ttl).Err()
 	if err != nil {
 		r.logger.Errorw("redis cache error", "error", err)
 	}
