@@ -1,5 +1,5 @@
-import SearchTable from "@/app/search/SearchTable"
-import Paginator from "@/components/Paginator"
+import SearchTable from '@/app/search/SearchTable'
+import Paginator from '@/components/Paginator'
 
 interface PageProps {
   params: {

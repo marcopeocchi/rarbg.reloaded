@@ -3,8 +3,6 @@ package domain
 import (
 	"context"
 	"net/http"
-
-	"github.com/marcopeocchi/rarbgreloaded/pkg/categories"
 )
 
 const (
@@ -34,12 +32,12 @@ type TorrentResponse struct {
 
 type TorrentRepository interface {
 	FindByName(ctx context.Context, name string, page int, asc bool) (*[]Torrent, int64, error)
-	FindByCategory(ctx context.Context, category categories.Category, page int, asc bool) (*[]Torrent, int64, error)
+	FindByCategory(ctx context.Context, category string, page int, asc bool) (*[]Torrent, int64, error)
 }
 
 type TorrentService interface {
 	FindByName(ctx context.Context, name string, page int, asc bool) (TorrentResponse, error)
-	FindByCategory(ctx context.Context, category categories.Category, page int, asc bool) (TorrentResponse, error)
+	FindByCategory(ctx context.Context, category string, page int, asc bool) (TorrentResponse, error)
 }
 
 type TorrentHandler interface {

@@ -50,6 +50,7 @@ func main() {
 	r.Route("/api", func(r chi.Router) {
 		r.Use(middlewares.CORS)
 		r.Get("/name/{name}", tc.FindByName())
+		r.Get("/category/{category}", tc.FindByCategory())
 	})
 
 	server := &http.Server{

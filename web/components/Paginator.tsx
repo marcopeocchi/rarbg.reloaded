@@ -1,47 +1,77 @@
 'use client'
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useRef } from "react"
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { list } from 'radash'
+import { useEffect, useMemo, useState } from 'react'
 
 type Props = {
-  route: string
   pages: number
+  route: string
 }
 
 export default function Paginator({ pages, route }: Props) {
-  const pagesRef = useRef([...Array(pages).keys()]
-    .filter((_, i, a) => i <= 3 || i > (a.length - 3))
-    .map(e => String(e + 1))
-    .map((e, i) => i === 3 ? '...' : e))
+  const pathname = usePathname()
 
-  const path = usePathname()
-  const active = useRef(Number(path.split('/').pop()) || 1)
+  const [active, setActive] = useState(1)
+
+  useEffect(() => {
+    if (pathname === '/') {
+      setActive(1)
+      return
+    }
+    const page = Number(pathname.split('/').pop())
+    if (page && isFinite(page)) {
+      setActive(page)
+    }
+  }, [pathname])
+
+  const previous = active - 1 || 1
+  const next = ((active + 1) % pages) || pages
+
+  const buildPaginatorList = useMemo(() => {
+    if (active == 1) {
+      return list(active, active + 1)
+    }
+    if (active + 1 >= pages) {
+      return list(active - 1, active)
+    }
+    return list(active - 1, active + 1)
+  }, [pages, active])
 
   return (
-    <div className="flex justify-center py-2">
-      <div className="join">
-        <Link href={`search/${route}/page/${(active.current - 1 < 1 ? 1 : active.current)}`}>
-          <button className="join-item btn">
-            Prev
-          </button>
-        </Link>
-        {pagesRef.current.map((el, idx) => (
-          <Link key={el} href={`search/${route}/page/${el}`}>
-            <button
-              className={`join-item btn ${String(active.current) === el && 'btn-primary'}`}
-              disabled={idx === 3}
-            >
-              {el}
-            </button>
+    <div className="flex justify-center p-4 w-full">
+      {pages > 1 && <div className="join">
+        {active !== 1 &&
+          <Link href="/page/1" className="join-item btn">
+            First
           </Link>
-        ))}
-        <Link href={`search/${route}/page/${((active.current + 1))}`}>
-          <button className="join-item btn">
-            Next
-          </button>
+        }
+        <Link href={`search/${route}/page/${previous}`} className="join-item btn">
+          Prev
         </Link>
-      </div>
+
+        {buildPaginatorList
+          .map(page => (
+            <Link
+              className={`join-item btn ${page === active && 'btn-active'}`}
+              href={`search/${route}/page/${page}`}
+              key={page}
+            >
+              {page}
+            </Link>
+          ))
+        }
+
+        <Link href={`search/${route}/page/${next}`} className="btn">
+          Next
+        </Link>
+        {active !== pages &&
+          <Link href={`search/${route}/page/${pages}`} className="join-item btn">
+            {pages}
+          </Link>
+        }
+      </div>}
     </div>
   )
 }

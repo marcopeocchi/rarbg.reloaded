@@ -1,6 +1,4 @@
-import Link from "next/link";
-import { Suspense } from "react";
-import Loading from "./loading";
+import Link from 'next/link'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,9 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           RarBG.reloaded
         </Link>
       </div>
-      <Suspense fallback={<Loading />}>
-        {children}
-      </Suspense>
+      {children}
     </div>
   )
 }

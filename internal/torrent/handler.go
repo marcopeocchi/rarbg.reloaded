@@ -34,7 +34,7 @@ func (h *Handler) FindByName() http.HandlerFunc {
 			return
 		}
 
-		torrents, err := h.service.FindByName(r.Context(), name, page, true)
+		torrents, err := h.service.FindByName(r.Context(), name, page, false)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -53,5 +53,24 @@ func (h *Handler) FindByCategory() http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 
 		defer r.Body.Close()
+
+		page, err := strconv.Atoi(r.URL.Query().Get("page"))
+		if err != nil {
+			page = 1
+		}
+
+		category := chi.URLParam(r, "category")
+
+		torrents, err := h.service.FindByCategory(r.Context(), category, page, false)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		err = json.NewEncoder(w).Encode(torrents)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 }

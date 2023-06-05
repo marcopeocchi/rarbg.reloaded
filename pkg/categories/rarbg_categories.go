@@ -23,6 +23,8 @@ func (c Category) String() string {
 		return "music"
 	case Software:
 		return "software"
+	case Games:
+		return "games"
 	}
 	return ""
 }

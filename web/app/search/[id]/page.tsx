@@ -1,7 +1,5 @@
-import Paginator from "@/components/Paginator"
-import { roundMiB } from "@/utils/unit"
-import { hashToMagnet } from "@/utils/url"
-import SearchTable from "../SearchTable"
+import Paginator from '@/components/Paginator'
+import SearchTable from '../SearchTable'
 
 interface PageProps {
   params: {

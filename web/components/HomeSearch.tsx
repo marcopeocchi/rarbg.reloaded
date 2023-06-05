@@ -10,11 +10,17 @@ export default function HomeSearch() {
   const router = useRouter()
 
   useEffect(() => {
-    inputRef.current?.addEventListener('keydown', (e) => {
+    const cb = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         router.push(`/search/${search}`)
       }
-    })
+    }
+    if (inputRef.current) {
+      inputRef.current?.addEventListener('keydown', cb)
+    }
+    return () => {
+      inputRef.current?.removeEventListener('keydown', cb)
+    }
   }, [inputRef, search])
 
   return (
