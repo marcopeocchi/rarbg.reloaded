@@ -11,7 +11,7 @@ interface PageProps {
 async function fetcher(title: string, page: number) {
   const res = await fetch(
     `http://localhost:8080/api/name/${title}?page=${page}`, {
-    next: { revalidate: 30 }
+    cache: 'no-store'
   })
   const data: Paginated<Torrent> = await res.json()
 

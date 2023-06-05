@@ -38,7 +38,7 @@ func (r *Repository) FindByName(ctx context.Context, name string, page int, asc 
 	))
 
 	cachedCount, countErr := r.rdb.Get(ctx, countCachingKey).Int64()
-	if countErr != nil {
+	if countErr == nil {
 		cached, err := r.rdb.Get(ctx, cachingKey).Bytes()
 		if err == nil && len(cached) > 0 {
 			err := gob.NewDecoder(bytes.NewReader(cached)).Decode(&all)
